@@ -3,7 +3,7 @@
 A hyper-focus workspace. One window, one slate at a time, nothing else.
 Each slate (tab) is either a **terminal** or a **browser** (Chromium). The UI is ink on glass.
 
-Built in: **focus sessions** (name a task, set the minutes, distracting domains get blocked until the timer ends) and **screen recording** (countdown, optional microphone, straight to mp4 with the glass intact) — see the sections below.
+An open source project by [Logical Minds](https://logicalminds.co). Built in: **focus sessions** (name a task, set the minutes, distracting domains get blocked until the timer ends) and **screen recording** (countdown, optional microphone, straight to mp4 with the glass intact) — see the sections below.
 
 The tab row is invisible by default. It shows up when you hover the top edge, hold `⌃` (the `⌃Tab` modifier), or for a second after you open or switch a tab.
 Everything else lives in the command palette (`⌘K`): slates, commands, search engine, and "go to" for anything you type.

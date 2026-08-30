@@ -48,6 +48,10 @@ p { margin: 0; text-wrap: pretty; }
   color: var(--fg-subtle);
 }
 
+/* inline brand links inherit their line's colour and light up on hover */
+a.lm { color: inherit; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; }
+a.lm:hover { color: var(--fg); text-decoration-color: var(--lm-purple-300); }
+
 /* ─── buttons ─── */
 .btn {
   display: inline-flex;
