@@ -2,6 +2,7 @@ import './styles.css';
 import { COMMANDS, type PalettePayload } from '../shared/palette';
 import { SEARCH_ENGINES, type SearchEngine } from '../shared/search';
 import type { OverviewPayload } from '../shared/overview';
+import { looksLikeUrl } from '../shared/url';
 
 const slate = window.slate;
 const q = document.getElementById('q') as HTMLInputElement;
@@ -361,7 +362,4 @@ window.addEventListener('keydown', (e) => {
 
 function host(url: string) {
   try { return new URL(url).host.replace(/^www\./, ''); } catch { return url; }
-}
-function looksLikeUrl(s: string) {
-  return /^[a-z][a-z0-9+.-]*:/i.test(s) || /^[^\s/]+\.[^\s/]{2,}(\/.*)?$/.test(s) || /^localhost/.test(s);
 }

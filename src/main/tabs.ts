@@ -5,27 +5,16 @@ import { TOP_BAR_HEIGHT, type AppState, type TabInfo, type TabKind } from '../sh
 import { spawnShell, type PtyHandle } from './pty';
 import { loadSettings, resolveDirs, saveSettings, type Settings } from './settings';
 import { SEARCH_ENGINES, type SearchEngine } from '../shared/search';
+import { BLANK_URL as BLANK, toUrl } from '../shared/url';
 import type { FocusSession, Prefs } from '../shared/types';
 import { BLOCKED_URL, hostMatches, normaliseDomain, notifyDone } from './focus';
 
 /** macOS material used for the frosted look. 'menu' is the most see-through of the theme-aware ones. */
 export const GLASS_MATERIAL = (process.env.SLATE_VIBRANCY ?? 'menu') as NonNullable<Parameters<BrowserWindow['setVibrancy']>[0]>;
-const BLANK = 'about:blank';
 
 interface TerminalTab extends TabInfo { kind: 'terminal'; pty: PtyHandle }
 interface BrowserTab extends TabInfo { kind: 'browser'; view: WebContentsView }
 type Tab = TerminalTab | BrowserTab;
-
-/** Turns whatever the user typed into a URL: scheme-less hosts get https, everything else becomes a search. */
-export function toUrl(input: string, engine: SearchEngine): string {
-  const s = input.trim();
-  if (!s) return BLANK;
-  if (/^[a-z][a-z0-9+.-]*:/i.test(s)) return s;
-  if (s === 'localhost' || /^localhost[:/]/.test(s)) return `http://${s}`;
-  if (!/\s/.test(s) && /^[^\s/]+\.[^\s/]{2,}(\/.*)?$/.test(s)) return `https://${s}`;
-  if (/^\d{1,3}(\.\d{1,3}){3}(:\d+)?(\/.*)?$/.test(s)) return `http://${s}`;
-  return SEARCH_ENGINES[engine].url + encodeURIComponent(s);
-}
 
 export class TabManager {
   private tabs: Tab[] = [];
