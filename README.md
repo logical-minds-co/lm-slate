@@ -78,6 +78,8 @@ macOS will ask for Screen Recording (and, with `⌘⌥⇧R`, Microphone) permiss
 - `src/renderer/` — the top bar, the address field and the xterm.js terminals. Everything is transparent; the glass comes from macOS vibrancy (`menu` material) or, in clear mode, from nothing at all.
 - `scripts/build.mjs` — esbuild for all three targets into `dist/`.
 
+`npm install` also runs `scripts/brand-electron.cjs`, which renames the development Electron bundle to "Slate", gives it our icon and re-signs it ad hoc — otherwise the Dock, the application menu and the About panel say "Electron" (macOS reads them from the bundle's Info.plist, not from `app.setName`). Run `npm run brand` after reinstalling Electron.
+
 `npm run icon` rebuilds the app icon from `assets/icon-source.png`: it measures the mark, redraws it as `assets/icon.svg`, renders `assets/icon.png` (1024px) with Electron and packs `build/icon.icns` for packaged builds. In development the Dock icon is set at launch.
 
 `SLATE_TEST=overview|record` opens the overview / records five seconds shortly after launch, for checks without keyboard input. `SLATE_VIBRANCY=<material>` overrides the macOS material (`sidebar`, `hud`, `fullscreen-ui`, `under-window`, …) for experimenting.
