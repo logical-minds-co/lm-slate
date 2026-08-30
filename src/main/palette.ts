@@ -16,7 +16,8 @@ export interface PaletteActions {
 export class Palette {
   readonly view: WebContentsView;
   private visible = false;
-  private mode: 'palette' | 'overview' | null = null;
+  private mode: 'palette' | 'overview' | 'countdown' | null = null;
+  private countdownResolve: ((ok: boolean) => void) | null = null;
   /** Set by the Overview so it can put the views back when the overlay closes. */
   onOverviewClosed: (() => void) | null = null;
 
@@ -58,7 +59,21 @@ export class Palette {
     this.view.webContents.send('overview:open', payload);
   }
 
-  private show(mode: 'palette' | 'overview') {
+  /** Big on-glass countdown; resolves true when it finishes, false if dismissed. */
+  countdown(seconds: number): Promise<boolean> {
+    this.close();
+    return new Promise((resolve) => {
+      this.countdownResolve = resolve;
+      this.show('countdown');
+      this.view.webContents.send('countdown:start', seconds, this.tabs.state().dark);
+    });
+  }
+
+  get countingDown() {
+    return this.mode === 'countdown';
+  }
+
+  private show(mode: 'palette' | 'overview' | 'countdown') {
     this.layout();
     this.view.setVisible(true);
     this.visible = true;
@@ -74,10 +89,25 @@ export class Palette {
     this.view.setVisible(false);
     this.view.webContents.send('palette:close');
     if (mode === 'overview') this.onOverviewClosed?.();
+    if (mode === 'countdown') this.finishCountdown(false);
     this.tabs.focusActiveSlate();
   }
 
+  private finishCountdown(ok: boolean) {
+    const resolve = this.countdownResolve;
+    this.countdownResolve = null;
+    resolve?.(ok);
+  }
+
   run(action: string) {
+    if (action === 'countdown-done') {
+      // resolve before close() so the close path doesn't report a cancel
+      const resolve = this.countdownResolve;
+      this.countdownResolve = null;
+      this.close();
+      resolve?.(true);
+      return;
+    }
     this.close();
     const [kind, ...rest] = action.split(':');
     const arg = rest.join(':');

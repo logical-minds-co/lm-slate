@@ -52,6 +52,7 @@ const api: SlateApi = {
   onPaletteOpen: (cb) => subscribe<[PalettePayload]>('palette:open', cb),
   onPaletteClose: (cb) => subscribe<[]>('palette:close', cb),
   onOverviewOpen: (cb) => subscribe<[OverviewPayload]>('overview:open', cb),
+  onCountdown: (cb) => subscribe<[number, boolean]>('countdown:start', cb),
   paletteRun: (action) => ipcRenderer.send('palette:run', action),
   paletteClose: () => ipcRenderer.send('palette:close'),
 };

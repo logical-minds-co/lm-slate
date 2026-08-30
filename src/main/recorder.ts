@@ -22,7 +22,16 @@ export class Recorder {
   /** Window rectangle in physical screen pixels, captured at start (glass mode crops to it). */
   private crop: { x: number; y: number; w: number; h: number } | null = null;
 
-  constructor(private win: BrowserWindow, private tabs: TabManager) {}
+  constructor(
+    private win: BrowserWindow,
+    private tabs: TabManager,
+    /** Shows the on-glass countdown; resolves false when the user cancels. */
+    private countdown: (seconds: number) => Promise<boolean>,
+    private cancelCountdown: () => void,
+    private isCountingDown: () => boolean,
+  ) {}
+
+  static readonly COUNTDOWN_SECONDS = 3;
 
   /** getDisplayMedia() in the renderer resolves to this window, no picker. */
   install() {
@@ -53,17 +62,20 @@ export class Recorder {
   }
 
   toggle() {
-    if (this.state || this.starting) this.stop();
-    else this.start();
+    if (this.isCountingDown()) this.cancelCountdown();
+    else if (this.state || this.starting) this.stop();
+    else void this.start();
   }
 
-  start() {
-    if (this.state || this.starting) return;
+  async start() {
+    if (this.state || this.starting || this.isCountingDown()) return;
     if (process.platform === 'darwin' && systemPreferences.getMediaAccessStatus('screen') === 'denied') {
       notify('Screen recording is off for Slate', 'Allow it in System Settings → Privacy & Security → Screen Recording.');
       void shell.openExternal('x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture');
       return;
     }
+    if (!(await this.countdown(Recorder.COUNTDOWN_SECONDS))) return; // cancelled
+    if (this.state || this.starting) return;
     // Glass mode records the whole display and crops afterwards — that needs ffmpeg.
     this.mode = this.tabs.prefs.recordMode === 'glass' && findFfmpeg() ? 'glass' : 'window';
     this.crop = null;

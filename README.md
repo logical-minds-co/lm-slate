@@ -49,7 +49,7 @@ Links clicked in a terminal open in a new browser tab. The session (tabs, theme)
 
 ## Screen recording
 
-`⌘⇧R` records the Slate window to `~/Movies/Slate/slate-<timestamp>.mp4` (H.264 straight from `MediaRecorder`). Two modes, chosen in settings:
+`⌘⇧R` shows a 3-second countdown on the glass (`esc` or `⌘⇧R` again cancels), then records the Slate window to `~/Movies/Slate/slate-<timestamp>.mp4` (H.264 straight from `MediaRecorder`). Two modes, chosen in settings:
 
 - **Glass** (default when `ffmpeg` is on the PATH): records the display the window is on and crops to the window afterwards, so the frosted background in the video is the real thing. Keep the window still while recording — the crop rectangle is taken at start.
 - **Window**: isolated window capture. No cropping step, but macOS renders the vibrancy on a flat backdrop, so the glass looks solid.

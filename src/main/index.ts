@@ -66,7 +66,12 @@ function createWindow() {
     toggleRecording: () => recorder?.toggle(),
   });
   overview = new Overview(win, tabs, palette);
-  recorder = new Recorder(win, tabs);
+  recorder = new Recorder(
+    win, tabs,
+    (seconds) => palette?.countdown(seconds) ?? Promise.resolve(true),
+    () => palette?.close(),
+    () => palette?.countingDown ?? false,
+  );
   recorder.install();
   refreshMenu();
   win.once('ready-to-show', () => {
@@ -129,8 +134,8 @@ function runDevHook() {
   if (!t) return;
   if (t === 'overview') setTimeout(() => void overview?.open(), 3000);
   if (t === 'record') {
-    setTimeout(() => recorder?.start(), 2000);
-    setTimeout(() => recorder?.stop(), 7000);
+    setTimeout(() => void recorder?.start(), 2000);
+    setTimeout(() => recorder?.stop(), 7000 + Recorder.COUNTDOWN_SECONDS * 1000);
   }
 }
 

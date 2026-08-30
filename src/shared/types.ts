@@ -105,6 +105,7 @@ export interface SlateApi {
   onPaletteOpen(cb: (payload: PalettePayload) => void): () => void;
   onPaletteClose(cb: () => void): () => void;
   onOverviewOpen(cb: (payload: OverviewPayload) => void): () => void;
+  onCountdown(cb: (seconds: number, dark: boolean) => void): () => void;
   paletteRun(action: string): void;
   paletteClose(): void;
 }

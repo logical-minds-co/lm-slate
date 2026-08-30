@@ -221,10 +221,49 @@ slate.onPaletteOpen((p) => {
   q.focus();
 });
 slate.onPaletteClose(() => {
-  document.documentElement.classList.remove('open', 'overview');
+  document.documentElement.classList.remove('open', 'overview', 'countdown');
   overviewEl.hidden = true;
   overviewEl.replaceChildren();
+  stopCountdown();
 });
+
+// ─── recording countdown ──────────────────────────────────────
+
+const countdownEl = document.getElementById('countdown') as HTMLDivElement;
+const digitEl = countdownEl.querySelector('.digit') as HTMLDivElement;
+let countdownTimer: number | undefined;
+
+function stopCountdown() {
+  window.clearInterval(countdownTimer);
+  countdownTimer = undefined;
+  countdownEl.hidden = true;
+}
+
+slate.onCountdown((seconds, dark) => {
+  stopCountdown();
+  document.documentElement.classList.toggle('dark', dark);
+  document.documentElement.classList.add('open', 'countdown');
+  countdownEl.hidden = false;
+  let n = seconds;
+  const show = () => {
+    digitEl.textContent = String(n);
+    digitEl.style.animation = 'none';
+    void digitEl.offsetWidth; // restart the tick animation
+    digitEl.style.animation = '';
+  };
+  show();
+  countdownTimer = window.setInterval(() => {
+    n -= 1;
+    if (n <= 0) {
+      stopCountdown();
+      slate.paletteRun('countdown-done'); // main hides the overlay before capture begins
+      return;
+    }
+    show();
+  }, 1000);
+  countdownEl.focus();
+});
+countdownEl.tabIndex = -1;
 
 // ─── overview / mosaic ────────────────────────────────────────
 
@@ -302,6 +341,10 @@ slate.onOverviewOpen((p) => {
 overviewEl.tabIndex = -1;
 overviewEl.addEventListener('click', () => slate.paletteClose());
 window.addEventListener('keydown', (e) => {
+  if (!countdownEl.hidden) {
+    if (e.key === 'Escape') { e.preventDefault(); slate.paletteClose(); }
+    return;
+  }
   if (!ov || overviewEl.hidden) return;
   switch (e.key) {
     case 'Escape': e.preventDefault(); slate.paletteClose(); break;
