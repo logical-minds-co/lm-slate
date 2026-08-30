@@ -69,6 +69,7 @@ function createWindow() {
     startRecordingWithMic: () => void recorder?.start(true),
   });
   overview = new Overview(win, tabs, palette);
+  tabs.onBeforeSwitch = () => palette?.dismiss();
   recorder = new Recorder(
     win, tabs,
     (seconds) => palette?.countdown(seconds) ?? Promise.resolve(true),
@@ -159,6 +160,10 @@ function runDevHook() {
   const t = process.env.SLATE_TEST;
   if (!t) return;
   if (t === 'overview') setTimeout(() => void overview?.open(), 3000);
+  if (t === 'overview-newtab') {
+    setTimeout(() => void overview?.open(), 3000);
+    setTimeout(() => tabs?.newTab('browser'), 6000);
+  }
   if (t === 'fit') setTimeout(() => { for (const b of tabs?.browserViews() ?? []) b.view.webContents.setZoomFactor(0.6); }, 3000);
   if (t === 'record') {
     setTimeout(() => void recorder?.start(process.env.SLATE_TEST_MIC === '1'), 2000);

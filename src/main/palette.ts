@@ -74,6 +74,11 @@ export class Palette {
     return this.mode === 'countdown';
   }
 
+  /** Close the palette or overview if open; never interrupts a recording countdown. */
+  dismiss() {
+    if (this.visible && this.mode !== 'countdown') this.close();
+  }
+
   private show(mode: 'palette' | 'overview' | 'countdown') {
     this.layout();
     this.view.setVisible(true);

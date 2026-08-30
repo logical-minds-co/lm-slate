@@ -51,6 +51,9 @@ export class TabManager {
     this.overlay = view;
   }
 
+  /** Called before any tab change so an open overlay (overview, palette) gets out of the way. */
+  onBeforeSwitch: (() => void) | null = null;
+
   /** Recreates the previous session's tabs (terminals come back as fresh shells). */
   restore() {
     const { tabs, activeIndex } = this.settings;
@@ -225,6 +228,7 @@ export class TabManager {
   }
 
   newTab(kind: TabKind, url?: string, activate = true): Tab {
+    if (activate) this.onBeforeSwitch?.();
     const id = randomUUID();
     const tab: Tab = kind === 'terminal' ? this.createTerminal(id) : this.createBrowser(id, url);
     const idx = this.active ? this.tabs.indexOf(this.active) + 1 : this.tabs.length;
@@ -301,6 +305,7 @@ export class TabManager {
   activate(id: string) {
     const tab = this.tabs.find((t) => t.id === id);
     if (!tab) return;
+    this.onBeforeSwitch?.();
     this.activeId = id;
     this.syncVisibility();
     this.layout();
@@ -352,6 +357,7 @@ export class TabManager {
   closeTab(id: string = this.activeId ?? '') {
     const i = this.tabs.findIndex((t) => t.id === id);
     if (i < 0) return;
+    this.onBeforeSwitch?.();
     const [tab] = this.tabs.splice(i, 1);
     if (tab.kind === 'terminal') {
       tab.pty.kill();
