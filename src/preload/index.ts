@@ -25,6 +25,8 @@ const api: SlateApi = {
   recSource: () => ipcRenderer.invoke('rec:source') as Promise<string>,
   recChunk: (chunk) => ipcRenderer.send('rec:chunk', chunk),
   recStarted: (mimeType: string) => ipcRenderer.send('rec:started', mimeType),
+  onMicRequest: (cb) => subscribe<[boolean]>('mics:request', cb),
+  sendMics: (labels) => ipcRenderer.send('mics:reply', labels),
   recDone: (error?: string) => ipcRenderer.send('rec:done', error),
   onModifier: (cb) => subscribe<[boolean]>('ui:modifier', cb),
 

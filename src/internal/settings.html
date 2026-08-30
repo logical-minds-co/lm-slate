@@ -35,7 +35,27 @@
     <section>
       <span class="label">Screen recording (⌘⇧R)</span>
       <div id="recmode" class="choices"></div>
+      <div class="row" style="margin-top: 18px">
+        <select id="mic"></select>
+        <button type="button" class="choice" id="mic-unlock" hidden>Allow microphone access</button>
+      </div>
+      <p class="help" id="michelp">Microphone used by ⌘⌥⇧R.</p>
+      <div class="path-row">
+        <span class="path" id="recdir"></span>
+        <button type="button" class="choice" id="recdir-choose">Choose…</button>
+        <button type="button" class="choice" id="recdir-reset">Default</button>
+      </div>
       <p class="help" id="rechelp">Recordings land in <span class="host">~/Movies/Slate</span> as mp4. <em>Glass</em> records the display and crops to the window, so the frosted background is real; <em>Window</em> captures the window alone on a flat backdrop.</p>
+    </section>
+
+    <section>
+      <span class="label">Downloads</span>
+      <div class="path-row">
+        <span class="path" id="dldir"></span>
+        <button type="button" class="choice" id="dldir-choose">Choose…</button>
+        <button type="button" class="choice" id="dldir-reset">Default</button>
+      </div>
+      <p class="help">Files downloaded in browser slates are saved here without asking. A notification tells you when one lands; click it to reveal the file.</p>
     </section>
 
     <span id="saved" class="saved">saved</span>

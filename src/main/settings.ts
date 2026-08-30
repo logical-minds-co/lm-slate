@@ -19,12 +19,24 @@ export interface Settings {
   focusMinutes: number;
   blockedDomains: string[];
   recordMode: RecordMode;
+  micLabel: string;
+  recordDir: string;
+  downloadDir: string;
 }
 
 const defaults: Settings = {
   dark: false, clear: false, searchEngine: DEFAULT_SEARCH_ENGINE, tabs: [], activeIndex: -1,
   focus: null, focusMinutes: 25, blockedDomains: [], recordMode: 'glass',
+  micLabel: '', recordDir: '', downloadDir: '',
 };
+
+/** Where recordings / downloads go, honouring the user's choice or the platform default. */
+export function resolveDirs(s: Pick<Settings, 'recordDir' | 'downloadDir'>) {
+  return {
+    recordDir: s.recordDir || join(app.getPath('videos'), 'Slate'),
+    downloadDir: s.downloadDir || app.getPath('downloads'),
+  };
+}
 
 function file() {
   return join(app.getPath('userData'), 'slate.json');

@@ -246,7 +246,7 @@ slate.onOverview((open) => document.documentElement.classList.toggle('overview',
 
 let recorder: MediaRecorder | null = null;
 
-slate.onRecStart(async ({ mode, mic }) => {
+slate.onRecStart(async ({ mode, mic, micLabel }) => {
   try {
     let stream: MediaStream;
     const dpr = window.devicePixelRatio || 1;
@@ -265,8 +265,17 @@ slate.onRecStart(async ({ mode, mic }) => {
       } as MediaStreamConstraints);
     }
     if (mic) {
+      // device ids are per-origin in Chromium, so the setting stores the label and we match it here
+      let deviceId: string | undefined;
+      if (micLabel) {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        deviceId = devices.find((d) => d.kind === 'audioinput' && d.label === micLabel)?.deviceId;
+      }
       const voice = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+        audio: {
+          ...(deviceId ? { deviceId: { exact: deviceId } } : {}),
+          echoCancellation: true, noiseSuppression: true, autoGainControl: true,
+        },
         video: false,
       });
       stream = new MediaStream([...stream.getVideoTracks(), ...voice.getAudioTracks()]);
@@ -297,6 +306,20 @@ slate.onRecStart(async ({ mode, mic }) => {
   }
 });
 slate.onRecStop(() => { if (recorder && recorder.state !== 'inactive') recorder.stop(); });
+
+slate.onMicRequest(async (unlock) => {
+  try {
+    if (unlock) {
+      // a short-lived capture makes Chromium reveal device names (and triggers the OS permission prompt once)
+      const s = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      s.getTracks().forEach((t) => t.stop());
+    }
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    slate.sendMics(devices.filter((d) => d.kind === 'audioinput' && d.label).map((d) => d.label));
+  } catch {
+    slate.sendMics([]);
+  }
+});
 
 // ─── focus session countdown ──────────────────────────────────
 

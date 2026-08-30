@@ -24,7 +24,7 @@ npm run watch   # rebuild on change (relaunch with `npm start`)
 | `⌘⇧R` | start / stop screen recording (mp4 in `~/Movies/Slate`; a `● 0:12` counter shows in the macOS menu bar, not in the video) |
 | `⌘⌥⇧R` | start a screen recording **with the microphone** mixed in (walkthroughs); stop with `⌘⇧R` |
 | `⌘⇧F` | focus on a task: type `write the report 25` → 25-minute session (minutes optional) |
-| `⌘,` | settings (`slate://settings`): search engine, focus length, blocked domains, recording mode |
+| `⌘,` | settings (`slate://settings`): search engine, focus length, blocked domains, recording mode, microphone, recordings and downloads folders |
 | `⌘T` | new browser tab |
 | `⌘N` | new terminal tab |
 | `⌘L` | edit the address (opens a browser tab if you're in a terminal) |
@@ -56,6 +56,8 @@ Links clicked in a terminal open in a new browser tab. The session (tabs, theme)
 - **Window**: isolated window capture. No cropping step, but macOS renders the vibrancy on a flat backdrop, so the glass looks solid.
 
 `⌘⌥⇧R` (or *Start screen recording with microphone* in the palette) records the same way but mixes the default microphone in as AAC, with echo cancellation and noise suppression on; the menu-bar counter reads `● 0:12 mic`. Silent recording stays the default so a stray `⌘⇧R` never captures audio.
+
+Settings let you pick the microphone (matched by device name, so it survives re-plugging), the recordings folder (default `~/Movies/Slate`) and the downloads folder (default `~/Downloads`). Downloads from browser slates go straight there, no dialog; a notification shows when one finishes and clicking it reveals the file.
 
 macOS will ask for Screen Recording (and, with `⌘⌥⇧R`, Microphone) permission the first time (for the Electron binary in development, for Slate once packaged). The only in-app indicator is a `● m:ss` counter in the menu bar — click it to stop — so nothing recording-related ends up in the footage.
 

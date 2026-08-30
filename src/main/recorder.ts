@@ -99,13 +99,13 @@ export class Recorder {
       };
     }
     this.starting = true;
-    this.win.webContents.send('rec:start', { mode: this.mode, mic: this.mic });
+    this.win.webContents.send('rec:start', { mode: this.mode, mic: this.mic, micLabel: this.tabs.prefs.micLabel });
   }
 
   /** The renderer has a live MediaRecorder; open the file before its first chunk lands. */
   started(mimeType: string) {
     if (!this.starting) return;
-    const dir = join(app.getPath('videos'), 'Slate');
+    const dir = this.tabs.dirs.recordDir;
     mkdirSync(dir, { recursive: true });
     this.file = join(dir, `slate-${stamp()}.${mimeType.startsWith('video/mp4') ? 'mp4' : 'webm'}`);
     this.stream = createWriteStream(this.file);

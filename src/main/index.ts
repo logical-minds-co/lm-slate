@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, nativeTheme, net, protocol } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, net, protocol } from 'electron';
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 import { GLASS_MATERIAL, TabManager } from './tabs';
@@ -6,6 +6,7 @@ import { buildMenu } from './menu';
 import { Palette } from './palette';
 import { Overview, type TerminalSnapshot } from './overview';
 import { Recorder, findFfmpeg } from './recorder';
+import { installDownloads } from './downloads';
 import { installBlocking } from './focus';
 import type { Prefs } from '../shared/types';
 import type { TabKind } from '../shared/types';
@@ -124,6 +125,28 @@ function wire() {
   ipcMain.handle('internal:prefs:get', (e) => (isInternal(e) ? m()?.prefs : null));
   ipcMain.on('internal:prefs:set', (e, prefs: Partial<Prefs>) => { if (isInternal(e)) { m()?.setPrefs(prefs); refreshMenu(); } });
   ipcMain.handle('internal:ffmpeg', (e) => (isInternal(e) ? !!findFfmpeg() : false));
+  ipcMain.handle('internal:dirs', (e) => (isInternal(e) ? m()?.dirs : null));
+  ipcMain.handle('internal:mics', (e, unlock: boolean) => {
+    const w = win;
+    if (!isInternal(e) || !w) return [];
+    return new Promise<string[]>((resolve) => {
+      const timer = setTimeout(() => { ipcMain.removeListener('mics:reply', onReply); resolve([]); }, unlock ? 30_000 : 3000);
+      const onReply = (_ev: Electron.IpcMainEvent, labels: string[]) => { clearTimeout(timer); resolve(Array.isArray(labels) ? labels : []); };
+      ipcMain.once('mics:reply', onReply);
+      w.webContents.send('mics:request', !!unlock);
+    });
+  });
+  ipcMain.handle('internal:choose-dir', async (e, key: 'recordDir' | 'downloadDir') => {
+    if (!isInternal(e) || !win || !tabs || (key !== 'recordDir' && key !== 'downloadDir')) return null;
+    const r = await dialog.showOpenDialog(win, {
+      title: key === 'recordDir' ? 'Recordings folder' : 'Downloads folder',
+      defaultPath: tabs.dirs[key],
+      properties: ['openDirectory', 'createDirectory'],
+    });
+    if (r.canceled || !r.filePaths[0]) return null;
+    tabs.setPrefs({ [key]: r.filePaths[0] });
+    return r.filePaths[0];
+  });
   ipcMain.handle('internal:engines', (e) => (isInternal(e)
     ? (Object.keys(SEARCH_ENGINES) as SearchEngine[]).map((key) => ({ key, label: SEARCH_ENGINES[key].label }))
     : []));
@@ -136,6 +159,7 @@ function runDevHook() {
   const t = process.env.SLATE_TEST;
   if (!t) return;
   if (t === 'overview') setTimeout(() => void overview?.open(), 3000);
+  if (t === 'fit') setTimeout(() => { for (const b of tabs?.browserViews() ?? []) b.view.webContents.setZoomFactor(0.6); }, 3000);
   if (t === 'record') {
     setTimeout(() => void recorder?.start(process.env.SLATE_TEST_MIC === '1'), 2000);
     setTimeout(() => recorder?.stop(), 7000 + Recorder.COUNTDOWN_SECONDS * 1000);
@@ -150,6 +174,7 @@ protocol.registerSchemesAsPrivileged([
 app.whenReady().then(() => {
   serveInternalPages();
   installBlocking(() => tabs);
+  installDownloads(() => tabs);
   wire();
   createWindow();
   app.on('activate', () => {

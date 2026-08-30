@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
 import { TOP_BAR_HEIGHT, type AppState, type TabInfo, type TabKind } from '../shared/types';
 import { spawnShell, type PtyHandle } from './pty';
-import { loadSettings, saveSettings, type Settings } from './settings';
+import { loadSettings, resolveDirs, saveSettings, type Settings } from './settings';
 import { SEARCH_ENGINES, type SearchEngine } from '../shared/search';
 import type { FocusSession, Prefs } from '../shared/types';
 import { BLOCKED_URL, hostMatches, normaliseDomain, notifyDone } from './focus';
@@ -113,7 +113,14 @@ export class TabManager {
       blockedDomains: this.settings.blockedDomains,
       searchEngine: this.settings.searchEngine,
       recordMode: this.settings.recordMode,
+      micLabel: this.settings.micLabel,
+      recordDir: this.settings.recordDir,
+      downloadDir: this.settings.downloadDir,
     };
+  }
+
+  get dirs() {
+    return resolveDirs(this.settings);
   }
 
   setPrefs(p: Partial<Prefs>) {
@@ -122,6 +129,9 @@ export class TabManager {
     }
     if (p.searchEngine && p.searchEngine in SEARCH_ENGINES) this.settings.searchEngine = p.searchEngine;
     if (p.recordMode === 'glass' || p.recordMode === 'window') this.settings.recordMode = p.recordMode;
+    if (typeof p.micLabel === 'string') this.settings.micLabel = p.micLabel.slice(0, 200);
+    if (typeof p.recordDir === 'string') this.settings.recordDir = p.recordDir;
+    if (typeof p.downloadDir === 'string') this.settings.downloadDir = p.downloadDir;
     if (Array.isArray(p.blockedDomains)) {
       const clean = p.blockedDomains.map((d) => normaliseDomain(String(d))).filter((d): d is string => !!d);
       this.settings.blockedDomains = [...new Set(clean)];

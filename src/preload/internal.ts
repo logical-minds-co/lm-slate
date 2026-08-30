@@ -8,6 +8,9 @@ if (location.protocol === 'slate:') {
     setPrefs: (prefs: Partial<Prefs>) => ipcRenderer.send('internal:prefs:set', prefs),
     searchEngines: () => ipcRenderer.invoke('internal:engines'),
     hasFfmpeg: () => ipcRenderer.invoke('internal:ffmpeg'),
+    dirs: () => ipcRenderer.invoke('internal:dirs'),
+    micDevices: (unlock = false) => ipcRenderer.invoke('internal:mics', unlock),
+    chooseDir: (key) => ipcRenderer.invoke('internal:choose-dir', key),
     getFocus: () => ipcRenderer.invoke('internal:focus:get'),
     stopFocus: () => ipcRenderer.send('focus:stop'),
   };

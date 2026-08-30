@@ -30,12 +30,23 @@ export interface Prefs {
   searchEngine: SearchEngine;
   /** glass = capture the screen and crop to the window (true frosted look, needs ffmpeg); window = isolated window capture */
   recordMode: RecordMode;
+  /** Microphone to use for walkthroughs, matched by device label ('' = system default). */
+  micLabel: string;
+  /** Folders; '' means the platform default (~/Movies/Slate, ~/Downloads). Resolved paths are in `dirs`. */
+  recordDir: string;
+  downloadDir: string;
+}
+
+export interface ResolvedDirs {
+  recordDir: string;
+  downloadDir: string;
 }
 
 export interface RecStartOptions {
   mode: RecordMode;
-  /** Mix the default microphone into the recording (walkthroughs). */
+  /** Mix a microphone into the recording (walkthroughs). */
   mic: boolean;
+  micLabel: string;
 }
 
 export interface RecordingState {
@@ -79,6 +90,9 @@ export interface SlateApi {
   recSource(): Promise<string>;
   recChunk(chunk: ArrayBuffer): void;
   recStarted(mimeType: string): void;
+  /** Main asks the renderer (the origin that records) for its microphone list. */
+  onMicRequest(cb: (unlock: boolean) => void): () => void;
+  sendMics(labels: string[]): void;
   recDone(error?: string): void;
   /** Control key held/released while focus is inside a browser page. */
   onModifier(cb: (held: boolean) => void): () => void;
@@ -120,6 +134,11 @@ export interface SlateInternalApi {
   setPrefs(prefs: Partial<Prefs>): void;
   searchEngines(): Promise<{ key: SearchEngine; label: string }[]>;
   hasFfmpeg(): Promise<boolean>;
+  dirs(): Promise<ResolvedDirs>;
+  /** Microphone names as seen by the recording page; `unlock` asks for mic access first so names are available. */
+  micDevices(unlock?: boolean): Promise<string[]>;
+  /** Native folder picker; resolves to the chosen path or null when cancelled. */
+  chooseDir(key: 'recordDir' | 'downloadDir'): Promise<string | null>;
   getFocus(): Promise<FocusSession | null>;
   stopFocus(): void;
 }
