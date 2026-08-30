@@ -172,6 +172,8 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 app.whenReady().then(() => {
+  // In development the binary is plain Electron; give the Dock our icon anyway. Packaged builds use build/icon.icns.
+  if (process.platform === 'darwin') app.dock?.setIcon(join(__dirname, '..', 'assets', 'icon.png'));
   serveInternalPages();
   installBlocking(() => tabs);
   installDownloads(() => tabs);

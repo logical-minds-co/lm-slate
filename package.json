@@ -10,7 +10,8 @@
     "dev": "node scripts/build.mjs && electron .",
     "watch": "node scripts/build.mjs --watch",
     "typecheck": "tsc --noEmit",
-    "postinstall": "electron-rebuild -f -w node-pty"
+    "postinstall": "electron-rebuild -f -w node-pty",
+    "icon": "electron scripts/icon.cjs"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.0.1",
