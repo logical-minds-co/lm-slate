@@ -1,0 +1,228 @@
+@import '../shared/tokens.css';
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  user-select: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--wash);
+}
+
+/* ─── top bar ────────────────────────────────────────────── */
+
+#bar {
+  height: var(--bar);
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding-left: 84px;   /* room for traffic lights */
+  padding-right: 12px;
+  -webkit-app-region: drag;
+  position: relative;
+}
+
+/* The tab row is invisible until asked for: hover the top edge, hold ⌃, or switch tabs. */
+#tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-app-region: no-drag;
+  mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+#bar:hover #tabs, #bar.reveal #tabs {
+  opacity: 1;
+  transform: none;
+}
+
+.tab {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-3);
+  font: inherit;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 220px;
+  white-space: nowrap;
+  cursor: default;
+  transition: color 160ms ease, background 160ms ease;
+  position: relative;
+}
+.tab:hover { color: var(--ink-2); }
+.tab.active { color: var(--ink); }
+.tab.active::after {
+  content: "";
+  position: absolute;
+  left: 10px; right: 10px; bottom: 1px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+.tab .title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tab[data-kind="terminal"] .title { font-family: var(--mono); font-size: 12px; letter-spacing: -0.01em; }
+.tab .close {
+  display: none;
+  width: 14px; height: 14px;
+  line-height: 14px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--ink-2);
+  margin-right: -4px;
+}
+.tab.active:hover .close { display: inline-block; }
+.tab .close:hover { color: var(--ink); background: var(--hair); }
+.tab.loading .title { animation: breathe 1.4s ease-in-out infinite; }
+
+@keyframes breathe { 50% { opacity: 0.45; } }
+
+/* focus session: the one thing that stays visible */
+#focus {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 16px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  -webkit-app-region: no-drag;
+  transition: opacity 300ms ease;
+}
+#focus[hidden] { display: none; }
+#focus .task { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+#focus .time { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; color: var(--ink); }
+#focus.done .time { color: var(--ink-2); }
+#focus.done .task::before { content: "✓ "; }
+
+#urlform {
+  position: absolute;
+  inset: 0 12px 0 84px;
+  display: flex;
+  align-items: center;
+  -webkit-app-region: no-drag;
+}
+#urlform[hidden] { display: none; }
+#url {
+  width: 100%;
+  height: 28px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  caret-color: var(--ink);
+  padding: 0 4px;
+  border-bottom: 1px solid var(--hair);
+}
+#url::placeholder { color: var(--ink-3); }
+#url::selection { background: var(--ink-3); }
+
+/* ─── content ────────────────────────────────────────────── */
+
+#content {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.term {
+  position: absolute;
+  inset: 0;
+  padding: 10px 12px 8px 14px;
+}
+.term[hidden] { display: none; }
+.term .xterm { height: 100%; }
+.term .xterm .xterm-viewport { background: transparent !important; }
+.term .xterm-screen { user-select: text; }
+.term ::-webkit-scrollbar { width: 6px; }
+.term ::-webkit-scrollbar-thumb { background: var(--ink-3); border-radius: 3px; }
+
+/* centered address / search field for a blank browser tab */
+#omni {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-bottom: 8vh;   /* optically centered */
+}
+#omni[hidden] { display: none; }
+#omni-input {
+  width: min(600px, 78%);
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  caret-color: var(--ink);
+  font-family: var(--sans);
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: -0.005em;
+  text-align: center;
+  padding: 8px 4px 10px;
+  border-bottom: 1px solid var(--ink-3);
+  transition: border-color 200ms ease;
+}
+#omni-input:focus { border-bottom-color: var(--ink-2); }
+#omni-input::placeholder { color: var(--ink-3); font-weight: 300; }
+#omni-input::selection { background: var(--ink-3); }
+#omni .hint {
+  color: var(--ink-3);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+#omni-input:focus ~ .hint { opacity: 1; }
+
+/* while the overview is up, the overlay draws the terminals as snapshots */
+html.overview .term, html.overview #omni { visibility: hidden; }
+
+#empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  color: var(--ink-3);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+#empty[hidden] { display: none; }
+kbd {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-2);
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-right: 6px;
+}

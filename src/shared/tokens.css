@@ -1,0 +1,23 @@
+:root {
+  --ink: rgba(24, 24, 28, 0.86);
+  --ink-2: rgba(24, 24, 28, 0.48);
+  --ink-3: rgba(24, 24, 28, 0.22);
+  --hair: rgba(24, 24, 28, 0.09);
+  --wash: rgba(255, 255, 255, 0.08);
+  --sans: -apple-system, "SF Pro Text", "Inter", system-ui, sans-serif;
+  --mono: "SF Mono", "JetBrains Mono", Menlo, Monaco, monospace;
+  --bar: 40px;
+}
+
+html.dark {
+  --ink: rgba(244, 244, 246, 0.9);
+  --ink-2: rgba(244, 244, 246, 0.5);
+  --ink-3: rgba(244, 244, 246, 0.24);
+  --hair: rgba(244, 244, 246, 0.1);
+  --wash: rgba(0, 0, 0, 0.14);
+}
+
+/* clear glass: no native blur, so a slightly heavier wash keeps the ink legible */
+html.clear { --wash: rgba(255, 255, 255, 0.34); }
+html.clear.dark { --wash: rgba(0, 0, 0, 0.5); }
+

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Settings</title>
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <main>
+    <h1>Settings</h1>
+
+    <section>
+      <span class="label">Default search engine</span>
+      <div id="engines" class="choices"></div>
+      <p class="help">Used for anything typed in the address field or the palette that doesn't look like a URL.</p>
+    </section>
+
+    <section>
+      <label for="minutes">Focus session length</label>
+      <div class="row">
+        <input id="minutes" type="number" min="1" max="600" />
+        <span class="unit">minutes by default</span>
+      </div>
+      <p class="help">Start a session from the palette (⌘⇧F): type the task and, optionally, the minutes — <em>write the report 25</em>.</p>
+    </section>
+
+    <section>
+      <label for="domains">Blocked while focusing</label>
+      <textarea id="domains" placeholder="youtube.com&#10;twitter.com&#10;news.ycombinator.com" spellcheck="false"></textarea>
+      <p class="help">One domain per line. Subdomains are included. While a session is running, these open <span class="host">slate://blocked</span> instead.</p>
+    </section>
+
+    <section>
+      <span class="label">Screen recording (⌘⇧R)</span>
+      <div id="recmode" class="choices"></div>
+      <p class="help" id="rechelp">Recordings land in <span class="host">~/Movies/Slate</span> as mp4. <em>Glass</em> records the display and crops to the window, so the frosted background is real; <em>Window</em> captures the window alone on a flat backdrop.</p>
+    </section>
+
+    <span id="saved" class="saved">saved</span>
+  </main>
+  <script src="settings.js"></script>
+</body>
+</html>

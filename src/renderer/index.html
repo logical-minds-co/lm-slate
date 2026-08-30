@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:;" />
+  <title>Slate</title>
+  <link rel="stylesheet" href="renderer.css" />
+</head>
+<body>
+  <header id="bar">
+    <nav id="tabs" aria-label="Tabs"></nav>
+    <div id="focus" hidden>
+      <span class="task"></span>
+      <span class="time"></span>
+    </div>
+    <form id="urlform" hidden autocomplete="off">
+      <input id="url" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="address or search" />
+    </form>
+  </header>
+  <main id="content">
+    <form id="omni" hidden autocomplete="off">
+      <input id="omni-input" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" />
+      <div class="hint">enter to go · esc to clear</div>
+    </form>
+    <div id="empty" hidden>
+      <span><kbd>⌘T</kbd> terminal</span>
+      <span><kbd>⌘N</kbd> browser</span>
+    </div>
+  </main>
+  <script src="renderer.js"></script>
+</body>
+</html>

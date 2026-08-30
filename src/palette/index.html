@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';" />
+  <title>Slate palette</title>
+  <link rel="stylesheet" href="palette.css" />
+</head>
+<body>
+  <div id="backdrop"></div>
+  <div id="overview" hidden></div>
+  <div id="panel" role="dialog" aria-label="Command palette">
+    <input id="q" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="slate, command, address or search" />
+    <ul id="list" role="listbox"></ul>
+  </div>
+  <script src="palette.js"></script>
+</body>
+</html>

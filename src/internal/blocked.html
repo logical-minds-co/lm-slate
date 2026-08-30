@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Blocked</title>
+  <link rel="stylesheet" href="blocked.css" />
+</head>
+<body>
+  <main class="blocked">
+    <h1><span class="host" id="host">this site</span> can wait</h1>
+    <p class="task">you're working on <strong id="task">…</strong></p>
+    <div class="time" id="time">--:--</div>
+    <button id="end" type="button">end the session</button>
+  </main>
+  <script src="blocked.js"></script>
+</body>
+</html>
