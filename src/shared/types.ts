@@ -34,11 +34,14 @@ export interface Prefs {
 
 export interface RecStartOptions {
   mode: RecordMode;
+  /** Mix the default microphone into the recording (walkthroughs). */
+  mic: boolean;
 }
 
 export interface RecordingState {
   startedAt: number;
   file: string;
+  mic: boolean;
 }
 
 export interface AppState {
@@ -100,6 +103,7 @@ export interface SlateApi {
   startFocus(task: string, minutes: number): void;
   stopFocus(): void;
   toggleRecording(): void;
+  startRecordingWithMic(): void;
 
   // palette page only
   onPaletteOpen(cb: (payload: PalettePayload) => void): () => void;

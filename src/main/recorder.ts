@@ -19,6 +19,7 @@ export class Recorder {
   private tray: Tray | null = null;
   private tick: NodeJS.Timeout | null = null;
   private mode: RecordMode = 'window';
+  private mic = false;
   /** Window rectangle in physical screen pixels, captured at start (glass mode crops to it). */
   private crop: { x: number; y: number; w: number; h: number } | null = null;
 
@@ -64,11 +65,20 @@ export class Recorder {
   toggle() {
     if (this.isCountingDown()) this.cancelCountdown();
     else if (this.state || this.starting) this.stop();
-    else void this.start();
+    else void this.start(false);
   }
 
-  async start() {
+  async start(mic: boolean) {
     if (this.state || this.starting || this.isCountingDown()) return;
+    if (mic && process.platform === 'darwin') {
+      const ok = await systemPreferences.askForMediaAccess('microphone');
+      if (!ok) {
+        notify('Microphone is off for Slate', 'Allow it in System Settings → Privacy & Security → Microphone.');
+        void shell.openExternal('x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone');
+        return;
+      }
+    }
+    this.mic = mic;
     if (process.platform === 'darwin' && systemPreferences.getMediaAccessStatus('screen') === 'denied') {
       notify('Screen recording is off for Slate', 'Allow it in System Settings → Privacy & Security → Screen Recording.');
       void shell.openExternal('x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture');
@@ -89,7 +99,7 @@ export class Recorder {
       };
     }
     this.starting = true;
-    this.win.webContents.send('rec:start', { mode: this.mode });
+    this.win.webContents.send('rec:start', { mode: this.mode, mic: this.mic });
   }
 
   /** The renderer has a live MediaRecorder; open the file before its first chunk lands. */
@@ -99,7 +109,7 @@ export class Recorder {
     mkdirSync(dir, { recursive: true });
     this.file = join(dir, `slate-${stamp()}.${mimeType.startsWith('video/mp4') ? 'mp4' : 'webm'}`);
     this.stream = createWriteStream(this.file);
-    this.state = { startedAt: Date.now(), file: this.file };
+    this.state = { startedAt: Date.now(), file: this.file, mic: this.mic };
     this.tabs.setRecording(this.state);
     this.showTray();
   }
@@ -145,7 +155,8 @@ export class Recorder {
     const update = () => {
       if (!this.state || !this.tray) return;
       const s = Math.floor((Date.now() - this.state.startedAt) / 1000);
-      this.tray.setTitle(`● ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`, { fontType: 'monospacedDigit' });
+      const mic = this.state.mic ? ' mic' : '';
+      this.tray.setTitle(`● ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}${mic}`, { fontType: 'monospacedDigit' });
     };
     update();
     this.tick = setInterval(update, 1000);
@@ -171,7 +182,7 @@ function finalize(file: string, crop: { x: number; y: number; w: number; h: numb
   const args = crop
     ? ['-y', '-v', 'error', '-i', file,
        '-vf', `crop=${even(crop.w)}:${even(crop.h)}:${crop.x}:${crop.y}`,
-       '-c:v', 'libx264', '-preset', 'fast', '-crf', '17', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out]
+       '-c:v', 'libx264', '-preset', 'fast', '-crf', '17', '-pix_fmt', 'yuv420p', '-c:a', 'copy', '-movflags', '+faststart', out]
     : ['-y', '-v', 'error', '-i', file, '-c', 'copy', '-movflags', '+faststart', out];
   return new Promise((resolve) => {
     execFile(ffmpeg, args, (err) => {

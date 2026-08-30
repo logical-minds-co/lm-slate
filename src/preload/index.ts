@@ -48,6 +48,7 @@ const api: SlateApi = {
   startFocus: (task, minutes) => ipcRenderer.send('focus:start', task, minutes),
   stopFocus: () => ipcRenderer.send('focus:stop'),
   toggleRecording: () => ipcRenderer.send('rec:toggle'),
+  startRecordingWithMic: () => ipcRenderer.send('rec:start-mic'),
 
   onPaletteOpen: (cb) => subscribe<[PalettePayload]>('palette:open', cb),
   onPaletteClose: (cb) => subscribe<[]>('palette:close', cb),

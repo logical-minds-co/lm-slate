@@ -35,6 +35,7 @@ export const COMMANDS = [
   { id: 'settings', label: 'Settings', keys: '⌘,' },
   { id: 'overview', label: 'Overview of all slates', keys: '⌘⇧O' },
   { id: 'record', label: 'Start screen recording', keys: '⌘⇧R' },
+  { id: 'record-mic', label: 'Start screen recording with microphone', keys: '⌘⌥⇧R', notWhileRecording: true },
   { id: 'theme', label: 'Toggle light / dark ink', keys: '⌘⇧D' },
   { id: 'glass', label: 'Toggle frosted / clear glass', keys: '⌘⇧G' },
   { id: 'reload', label: 'Reload page', keys: '⌘R', browser: true },

@@ -246,7 +246,7 @@ slate.onOverview((open) => document.documentElement.classList.toggle('overview',
 
 let recorder: MediaRecorder | null = null;
 
-slate.onRecStart(async ({ mode }) => {
+slate.onRecStart(async ({ mode, mic }) => {
   try {
     let stream: MediaStream;
     const dpr = window.devicePixelRatio || 1;
@@ -264,10 +264,19 @@ slate.onRecStart(async ({ mode }) => {
         video: { mandatory: { chromeMediaSource: 'desktop', chromeMediaSourceId: id, maxFrameRate: 60 } },
       } as MediaStreamConstraints);
     }
-    // mp4/H.264 plays everywhere (QuickTime, iMovie, Keynote); webm is the fallback
-    const mimeType = ['video/mp4;codecs=avc1.640028', 'video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm']
-      .find((m) => MediaRecorder.isTypeSupported(m)) ?? 'video/webm';
-    const rec = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 16_000_000 });
+    if (mic) {
+      const voice = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+        video: false,
+      });
+      stream = new MediaStream([...stream.getVideoTracks(), ...voice.getAudioTracks()]);
+    }
+    // mp4/H.264 (+AAC) plays everywhere (QuickTime, iMovie, Keynote); webm is the fallback
+    const candidates = mic
+      ? ['video/mp4;codecs=avc1.640028,mp4a.40.2', 'video/mp4;codecs=avc1,mp4a', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm']
+      : ['video/mp4;codecs=avc1.640028', 'video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm'];
+    const mimeType = candidates.find((m) => MediaRecorder.isTypeSupported(m)) ?? 'video/webm';
+    const rec = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 16_000_000, audioBitsPerSecond: 160_000 });
     let queue: Promise<void> = Promise.resolve();
     rec.ondataavailable = (e) => {
       if (e.data.size === 0) return;

@@ -8,6 +8,7 @@ export interface MenuActions {
   settings: () => void;
   overview: () => void;
   record: () => void;
+  recordMic: () => void;
 }
 
 export function buildMenu(tabs: () => TabManager | undefined, searchEngine: SearchEngine, actions: MenuActions) {
@@ -85,6 +86,7 @@ export function buildMenu(tabs: () => TabManager | undefined, searchEngine: Sear
         { label: 'Toggle Frosted / Clear Glass', accelerator: 'CmdOrCtrl+Shift+G', click: t((m) => m.toggleClear()) },
         { type: 'separator' },
         { label: 'Start / Stop Screen Recording', accelerator: 'CmdOrCtrl+Shift+R', click: actions.record },
+        { label: 'Start Screen Recording with Microphone', accelerator: 'CmdOrCtrl+Alt+Shift+R', click: actions.recordMic },
         ...(process.platform !== 'darwin' ? [{ label: 'Settings…', accelerator: 'CmdOrCtrl+,', click: actions.settings }] : []),
         { type: 'separator' },
         { role: 'togglefullscreen' },

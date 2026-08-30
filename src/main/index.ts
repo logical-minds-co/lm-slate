@@ -23,6 +23,7 @@ const refreshMenu = () => buildMenu(() => tabs ?? undefined, tabs?.searchEngine 
   settings: () => tabs?.openInternal('slate://settings/'),
   overview: () => overview?.toggle(),
   record: () => recorder?.toggle(),
+  recordMic: () => void recorder?.start(true),
 });
 
 /** slate://settings/, slate://blocked/ — internal pages served from dist/internal. */
@@ -64,6 +65,7 @@ function createWindow() {
     openOverview: () => void overview?.open(),
     pickOverview: (id) => overview?.pick(id),
     toggleRecording: () => recorder?.toggle(),
+    startRecordingWithMic: () => void recorder?.start(true),
   });
   overview = new Overview(win, tabs, palette);
   recorder = new Recorder(
@@ -112,6 +114,7 @@ function wire() {
   ipcMain.on('palette:close', () => palette?.close());
   ipcMain.on('snapshots:reply', (_e, snaps: Record<string, TerminalSnapshot>) => overview?.receiveSnapshots(snaps));
   ipcMain.on('rec:toggle', () => recorder?.toggle());
+  ipcMain.on('rec:start-mic', () => void recorder?.start(true));
   ipcMain.handle('rec:source', () => recorder?.sourceId());
   ipcMain.on('rec:chunk', (_e, buf: ArrayBuffer) => recorder?.chunk(buf));
   ipcMain.on('rec:started', (_e, mimeType: string) => recorder?.started(mimeType));
@@ -134,7 +137,7 @@ function runDevHook() {
   if (!t) return;
   if (t === 'overview') setTimeout(() => void overview?.open(), 3000);
   if (t === 'record') {
-    setTimeout(() => void recorder?.start(), 2000);
+    setTimeout(() => void recorder?.start(process.env.SLATE_TEST_MIC === '1'), 2000);
     setTimeout(() => recorder?.stop(), 7000 + Recorder.COUNTDOWN_SECONDS * 1000);
   }
 }

@@ -22,6 +22,7 @@ npm run watch   # rebuild on change (relaunch with `npm start`)
 | `⌘K` / `⌘P` | command palette — type to filter slates and commands, `↵` to run, `⌘⌫` to close the selected slate, `esc` to dismiss; free text becomes "open / search" |
 | `⌘⇧O` | overview: a live mosaic of every slate — pages tiled and zoomed out, terminals as text snapshots; `←↑→↓`/`1–9` to pick, `↵`/click to switch, `esc` to close |
 | `⌘⇧R` | start / stop screen recording (mp4 in `~/Movies/Slate`; a `● 0:12` counter shows in the macOS menu bar, not in the video) |
+| `⌘⌥⇧R` | start a screen recording **with the microphone** mixed in (walkthroughs); stop with `⌘⇧R` |
 | `⌘⇧F` | focus on a task: type `write the report 25` → 25-minute session (minutes optional) |
 | `⌘,` | settings (`slate://settings`): search engine, focus length, blocked domains, recording mode |
 | `⌘T` | new browser tab |
@@ -54,7 +55,9 @@ Links clicked in a terminal open in a new browser tab. The session (tabs, theme)
 - **Glass** (default when `ffmpeg` is on the PATH): records the display the window is on and crops to the window afterwards, so the frosted background in the video is the real thing. Keep the window still while recording — the crop rectangle is taken at start.
 - **Window**: isolated window capture. No cropping step, but macOS renders the vibrancy on a flat backdrop, so the glass looks solid.
 
-macOS will ask for Screen Recording permission the first time (for the Electron binary in development, for Slate once packaged). The only in-app indicator is a `● m:ss` counter in the menu bar — click it to stop — so nothing recording-related ends up in the footage.
+`⌘⌥⇧R` (or *Start screen recording with microphone* in the palette) records the same way but mixes the default microphone in as AAC, with echo cancellation and noise suppression on; the menu-bar counter reads `● 0:12 mic`. Silent recording stays the default so a stray `⌘⇧R` never captures audio.
+
+macOS will ask for Screen Recording (and, with `⌘⌥⇧R`, Microphone) permission the first time (for the Electron binary in development, for Slate once packaged). The only in-app indicator is a `● m:ss` counter in the menu bar — click it to stop — so nothing recording-related ends up in the footage.
 
 ## What the embedded browser can't do (yet)
 

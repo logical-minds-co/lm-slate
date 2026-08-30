@@ -48,6 +48,7 @@ function allItems(p: PalettePayload): Item[] {
   for (const c of COMMANDS) {
     if ('browser' in c && c.browser && active?.kind !== 'browser') continue;
     if ('focusOnly' in c && c.focusOnly && !p.focus) continue;
+    if ('notWhileRecording' in c && c.notWhileRecording && p.recording) continue;
     let label: string = c.label;
     if (c.id === 'theme') label = p.dark ? 'Light ink' : 'Dark ink';
     if (c.id === 'glass') label = p.clear ? 'Frosted glass' : 'Clear glass';

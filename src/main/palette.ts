@@ -11,6 +11,7 @@ export interface PaletteActions {
   openOverview: () => void;
   pickOverview: (id: string) => void;
   toggleRecording: () => void;
+  startRecordingWithMic: () => void;
 }
 
 export class Palette {
@@ -135,6 +136,7 @@ export class Palette {
           case 'settings': this.tabs.openInternal('slate://settings/'); break;
           case 'overview': this.actions.openOverview(); break;
           case 'record': this.actions.toggleRecording(); break;
+          case 'record-mic': this.actions.startRecordingWithMic(); break;
           case 'theme': this.tabs.toggleTheme(); break;
           case 'glass': this.tabs.toggleClear(); break;
           case 'reload': this.tabs.reload(); break;
