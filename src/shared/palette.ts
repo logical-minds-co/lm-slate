@@ -27,8 +27,8 @@ export interface PalettePayload {
 export type PaletteAction = string;
 
 export const COMMANDS = [
-  { id: 'new-terminal', label: 'New terminal', keys: '⌘T' },
-  { id: 'new-browser', label: 'New browser', keys: '⌘N' },
+  { id: 'new-terminal', label: 'New terminal', keys: '⌘N' },
+  { id: 'new-browser', label: 'New browser', keys: '⌘T' },
   { id: 'close', label: 'Close slate', keys: '⌘W' },
   { id: 'focus', label: 'Focus on a task…', keys: '⌘⇧F' },
   { id: 'focus-stop', label: 'End focus session', focusOnly: true },

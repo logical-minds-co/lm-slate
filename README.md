@@ -24,8 +24,8 @@ npm run watch   # rebuild on change (relaunch with `npm start`)
 | `⌘⇧R` | start / stop screen recording (mp4 in `~/Movies/Slate`; a `● 0:12` counter shows in the macOS menu bar, not in the video) |
 | `⌘⇧F` | focus on a task: type `write the report 25` → 25-minute session (minutes optional) |
 | `⌘,` | settings (`slate://settings`): search engine, focus length, blocked domains, recording mode |
-| `⌘T` | new terminal tab |
-| `⌘N` | new browser tab |
+| `⌘T` | new browser tab |
+| `⌘N` | new terminal tab |
 | `⌘L` | edit the address (opens a browser tab if you're in a terminal) |
 | `⌘W` | close tab |
 | `⌘1…9` | jump to tab |
