@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Slate — One slate at a time</title>
+  <meta name="description" content="A hyper-focus workspace. One window, one slate, nothing else. Every slate is a terminal or a browser. The UI is ink on glass.">
+  <meta property="og:title" content="Slate — One slate at a time">
+  <meta property="og:description" content="A hyper-focus workspace. One window, one slate, nothing else. Every slate is a terminal or a browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://logical-minds-co.github.io/lm-slate/">
+  <meta name="theme-color" content="#1C1C1C">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="#top" aria-label="Slate">
+      <svg width="30" height="30" viewBox="0 0 96 96" aria-hidden="true">
+        <rect x="14" y="14" width="68" height="68" rx="20" fill="none" stroke="#F2F1F4" stroke-width="8"/>
+        <rect x="34" y="32" width="9" height="32" rx="4.5" fill="#6F2AE4"/>
+      </svg>
+      <span>slate</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/logical-minds-co/lm-slate">GitHub</a>
+      <a class="btn btn-primary btn-sm" href="#install">Download</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <span class="overline">Open source · by Logical Minds</span>
+    <h1>One slate at a time</h1>
+    <p class="lede">A hyper-focus workspace. One window, one slate, nothing else. Every slate is a terminal or a browser. The UI is ink on glass.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#install">Download for macOS</a>
+      <a class="btn btn-ghost" href="https://github.com/logical-minds-co/lm-slate">View source</a>
+    </div>
+  </header>
+
+  <div class="demo-wrap">
+    <div class="demo" data-slate="terminal">
+      <div class="demo-bar">
+        <div class="demo-title">
+          <svg width="18" height="18" viewBox="0 0 96 96" aria-hidden="true">
+            <rect x="14" y="14" width="68" height="68" rx="20" fill="none" stroke="#7F7C87" stroke-width="8"/>
+            <rect x="34" y="32" width="9" height="32" rx="4.5" fill="#6F2AE4"/>
+          </svg>
+          <span class="only-terminal">zsh — ~/work</span>
+          <span class="only-browser">docs.slate.dev</span>
+        </div>
+        <span class="overline"><span class="only-terminal">Slate 1 of 3</span><span class="only-browser">Slate 2 of 3</span></span>
+      </div>
+      <div class="demo-body">
+        <div class="terminal only-terminal">
+          <div><span class="prompt">›</span> git clone https://github.com/logical-minds-co/lm-slate</div>
+          <div class="dim">Cloning into 'lm-slate'... done.</div>
+          <div><span class="prompt">›</span> cd lm-slate &amp;&amp; npm run dev</div>
+          <div class="dim">Building one window. Removing everything else.</div>
+          <div class="line"><span class="prompt">›</span>&nbsp;<span class="cursor" aria-hidden="true"></span></div>
+        </div>
+        <div class="browser only-browser" aria-hidden="true">
+          <div class="sk sk-title"></div>
+          <div class="sk" style="width: 90%"></div>
+          <div class="sk" style="width: 84%"></div>
+          <div class="sk" style="width: 88%"></div>
+          <div class="sk sk-accent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="features" id="features">
+    <article class="card">
+      <svg width="36" height="36" viewBox="0 0 96 96" aria-hidden="true">
+        <rect x="14" y="14" width="68" height="68" rx="20" fill="none" stroke="#F2F1F4" stroke-width="8"/>
+        <rect x="34" y="32" width="9" height="32" rx="4.5" fill="#6F2AE4"/>
+      </svg>
+      <h3>One window</h3>
+      <p>No splits, no panels, no floating anything. You see one slate. Switching is instant; everything else stays out of sight.</p>
+    </article>
+    <article class="card">
+      <svg width="36" height="36" viewBox="0 0 96 96" aria-hidden="true">
+        <rect x="12" y="12" width="72" height="72" rx="22" fill="#F2F1F4"/>
+        <path d="M32 34 L46 48 L32 62" fill="none" stroke="#1C1C1C" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="52" y="56" width="16" height="9" rx="4.5" fill="#6F2AE4"/>
+      </svg>
+      <h3>Terminal or browser</h3>
+      <p>Each slate is a full terminal or a full Chromium browser. The two things you actually work in, and nothing in between.</p>
+    </article>
+    <article class="card">
+      <svg width="36" height="36" viewBox="0 0 96 96" aria-hidden="true">
+        <rect x="30" y="12" width="54" height="54" rx="17" fill="none" stroke="#F2F1F4" stroke-width="6" opacity="0.32"/>
+        <rect x="12" y="30" width="54" height="54" rx="17" fill="#F2F1F4"/>
+        <rect x="26" y="45" width="8" height="24" rx="4" fill="#6F2AE4"/>
+      </svg>
+      <h3>Ink on glass</h3>
+      <p>A near-black surface, high-contrast type, one purple cursor. No chrome to look at, so you look at your work.</p>
+    </article>
+  </section>
+
+  <section class="install" id="install">
+    <h2>Install in one line</h2>
+    <div class="command">
+      <span class="prompt">›</span>
+      <code id="install-cmd">git clone https://github.com/logical-minds-co/lm-slate.git &amp;&amp; cd lm-slate &amp;&amp; npm install &amp;&amp; npm run dev</code>
+      <button class="copy" type="button" data-copy="#install-cmd" aria-label="Copy command">Copy</button>
+    </div>
+    <p class="fine">MIT licensed. Built in the open by Logical Minds. macOS, Node 22+.</p>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg width="20" height="20" viewBox="0 0 96 96" aria-hidden="true">
+          <rect x="14" y="14" width="68" height="68" rx="20" fill="none" stroke="#7F7C87" stroke-width="8"/>
+          <rect x="34" y="32" width="9" height="32" rx="4.5" fill="#6F2AE4"/>
+        </svg>
+        <span>slate — an open source project by Logical Minds</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/logical-minds-co/lm-slate">GitHub</a>
+        <a href="https://github.com/logical-minds-co/lm-slate#readme">Docs</a>
+        <a href="https://github.com/logical-minds-co/lm-slate/blob/main/LICENSE">License</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
