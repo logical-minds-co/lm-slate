@@ -161,6 +161,27 @@ a.lm:hover { color: var(--fg); text-decoration-color: var(--lm-purple-300); }
   html { scroll-behavior: auto; }
 }
 
+/* ─── screenshots ─── */
+.screens {
+  width: 100%;
+  max-width: var(--measure);
+  padding: 0 32px 96px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.screens figure { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.screens img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+}
+.screens figcaption { font-size: 14px; color: var(--fg-muted); display: flex; align-items: baseline; gap: 10px; }
+.screens figcaption .overline { color: var(--lm-purple-300); flex: none; }
+
 /* ─── features ─── */
 .features {
   width: 100%;
@@ -244,14 +265,14 @@ a.lm:hover { color: var(--fg); text-decoration-color: var(--lm-purple-300); }
 
 /* ─── responsive ─── */
 @media (max-width: 860px) {
-  .features { grid-template-columns: 1fr; }
+  .features, .screens { grid-template-columns: 1fr; }
   .hero { padding-top: 64px; }
 }
 @media (max-width: 640px) {
   .nav { padding: 20px 20px; }
   .nav-links { gap: 18px; }
   .nav-links > a:not(.btn) { display: none; }
-  .hero, .demo-wrap, .features, .install { padding-left: 20px; padding-right: 20px; }
+  .hero, .demo-wrap, .screens, .features, .install { padding-left: 20px; padding-right: 20px; }
   .browser { padding: 32px 24px; }
   .command { flex-wrap: wrap; justify-content: center; }
   .terminal { white-space: pre-wrap; word-break: break-word; font-size: 13px; }

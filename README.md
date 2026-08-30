@@ -9,6 +9,11 @@ The tab row is invisible by default. It shows up when you hover the top edge, ho
 Everything else lives in the command palette (`⌘K`): slates, commands, search engine, and "go to" for anything you type.
 A new browser tab is just a centered field: type an address or a search, press enter.
 
+<p align="center">
+  <img src="site/img/palette.jpg" alt="The command palette open over a terminal" width="49%">
+  <img src="site/img/new-slate.jpg" alt="A new browser slate: one centered address field on glass" width="49%">
+</p>
+
 ## Run
 
 ```bash
