@@ -153,10 +153,10 @@ body {
 .term {
   position: absolute;
   inset: 0;
-  padding: 10px 12px 8px 14px;
 }
 .term[hidden] { display: none; }
-.term .xterm { height: 100%; }
+/* padding lives on .xterm: FitAddon subtracts the terminal element's own padding when sizing rows */
+.term .xterm { height: 100%; padding: 10px 12px 8px 14px; }
 .term .xterm .xterm-viewport { background: transparent !important; }
 .term .xterm-screen { user-select: text; }
 .term ::-webkit-scrollbar { width: 6px; }

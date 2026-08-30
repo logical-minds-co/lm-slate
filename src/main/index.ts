@@ -164,6 +164,7 @@ function runDevHook() {
     setTimeout(() => void overview?.open(), 3000);
     setTimeout(() => tabs?.newTab('browser'), 6000);
   }
+  if (t === 'fill') setTimeout(() => { const a = tabs?.active; if (a?.kind === 'terminal') tabs?.ptyWrite(a.id, 'seq 1 400\n'); }, 3000);
   if (t === 'fit') setTimeout(() => { for (const b of tabs?.browserViews() ?? []) b.view.webContents.setZoomFactor(0.6); }, 3000);
   if (t === 'record') {
     setTimeout(() => void recorder?.start(process.env.SLATE_TEST_MIC === '1'), 2000);
